@@ -23,7 +23,7 @@ class Window:  #create window class
     def close(self):  #removes the window
         self.running = False
 
-    def draw_line(self, Line, fill_color):
+    def draw_line(self, Line, fill_color = "Black"):  #draws a line in the window
         Line.draw(self.canvas, fill_color)
 
 class Point:  #create Point class
@@ -40,6 +40,6 @@ class Line:  #create Line class
         self.x2 = point_2.x
         self.y2 = point_2.y
 
-    def draw(self, Canvas, fill_color = "black"):  #
+    def draw(self, Canvas, fill_color = "black"):  #draw method for creating a line between two points
         Canvas.create_line(self.x1, self.y1, self.x2, self.y2, fill = fill_color, width = 2)
         Canvas.pack(fill = BOTH, expand = 1)
