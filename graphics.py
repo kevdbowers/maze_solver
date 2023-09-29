@@ -10,15 +10,36 @@ class Window:  #create window class
         self.running = False
         self.root.protocol("WM_DELETE_WINDOW", self.close)
 
-    def redraw(self):  #redraw method, when called redraws the window
+    def redraw(self):  #redraw method, when called maintains the window
         self.root.update_idletasks()
         self.root.update()
         
-    def wait_for_close(self):
+    def wait_for_close(self):  #wait_for_close method, once the window is created maintains the window until closed
         self.running = True
         while self.running == True:
             self.redraw()
         print("Window closed...")
 
-    def close(self):
+    def close(self):  #removes the window
         self.running = False
+
+    def draw_line(self, Line, fill_color):
+        Line.draw(self.canvas, fill_color)
+
+class Point:  #create Point class
+
+    def __init__(self, x, y):  #constructor stores coordinates of the point
+        self.x = x
+        self.y = y
+
+class Line:  #create Line class
+
+    def __init__(self, point_1, point_2):  #constructor takes and holds coordinates of two points
+        self.x1 = point_1.x
+        self.y1 = point_1.y
+        self.x2 = point_2.x
+        self.y2 = point_2.y
+
+    def draw(self, Canvas, fill_color = "black"):  #
+        Canvas.create_line(self.x1, self.y1, self.x2, self.y2, fill = fill_color, width = 2)
+        Canvas.pack(fill = BOTH, expand = 1)
