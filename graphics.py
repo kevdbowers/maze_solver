@@ -35,11 +35,9 @@ class Point:  #create Point class
 class Line:  #create Line class
 
     def __init__(self, point_1, point_2):  #constructor takes and holds coordinates of two points
-        self.x1 = point_1.x
-        self.y1 = point_1.y
-        self.x2 = point_2.x
-        self.y2 = point_2.y
+        self.point_1 = point_1
+        self.point_2 = point_2
 
-    def draw(self, Canvas, fill_color = "black"):  #draw method for creating a line between two points
-        Canvas.create_line(self.x1, self.y1, self.x2, self.y2, fill = fill_color, width = 2)
-        Canvas.pack(fill = BOTH, expand = 1)
+    def draw(self, canvas, fill_color = "black"):  #draw method for creating a line between two points
+        canvas.create_line(self.point_1.x, self.point_1.y, self.point_2.x, self.point_2.y, fill = fill_color, width = 2)
+        canvas.pack(fill = BOTH, expand = 1)

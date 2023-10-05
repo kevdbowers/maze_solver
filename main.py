@@ -1,5 +1,5 @@
-from graphics import Window, Line, Point  #called Window, Line, Point, Cell class from graphics
-from cell import Cell  #called Cell from cell
+from graphics import Window, Line, Point  #called Window, Line, Point classes from graphics
+from cell import Cell  #called Cell class from cell
 
 def main():  #create main
     win = Window(800, 600)  #create a Window to operate in
@@ -8,11 +8,14 @@ def main():  #create main
     lin = Line(point_one, point_two)  #creating a test Line
     win.draw_line(lin, "Red")
 
-    cell_point_one = Point(100, 200)  #creating test Points
-    cell_point_two = Point(50, 500)
-    cel = Cell(cell_point_one, cell_point_two, win)  #creating a test Cell
+    cel = Cell(win)  #creating a test Cell
     cel.has_bottom_wall = False
-    cel.draw()
+    cel.draw(50, 100, 500, 200)
+    cel_2 = Cell(win)
+    cel_2.has_top_wall = False
+    cel_2.draw(100, 200, 750, 400)
+
+    cel.draw_move(cel_2, True)
 
     win.wait_for_close()
 
