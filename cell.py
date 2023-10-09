@@ -1,4 +1,4 @@
-from graphics import Window, Line, Point  #  import Line, Point classes
+from graphics import Line, Point  #  import Line, Point classes
 
 class Cell:  #create Cell class
 
@@ -12,6 +12,7 @@ class Cell:  #create Cell class
         self.y1 = None
         self.y2 = None
         self.win = win
+        self.visited = False
 
     def draw(self, x1, y1, x2, y2):  #draw method defines corners, then creates a cell with up to four walls
         if x1 < x2:

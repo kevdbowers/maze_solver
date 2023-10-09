@@ -1,9 +1,9 @@
-import time  #import time library
+import random, time  #import random and time librarries
 from cell import Cell  #import Cell class
 
 class Maze:  #create Maze class
 
-    def __init__(self, x1, y1, num_rows, num_cols, cell_size_x, cell_size_y, win = None):  #constructor initiates creation location for a maze along with size and cell-population
+    def __init__(self, x1, y1, num_rows, num_cols, cell_size_x, cell_size_y, win = None, seed = None):  #constructor initiates creation location for a maze along with size and cell-population
         self.x1 = x1
         self.y1 = y1
         self.num_rows = num_rows
@@ -11,8 +11,15 @@ class Maze:  #create Maze class
         self.cell_size_x = cell_size_x
         self.cell_size_y = cell_size_y
         self.win = win
+        
+        if seed != None:  #if a seed is given for the maze use it, if not generate a random seed, testing purposes only
+            random.seed(seed)
+        else:
+            random.seed()
 
         self.create_cells()  #draws maze through create_cells method
+        self.break_entrance_and_exit()  #defining entrance and exit cells so that they're left open
+        self.break_rand_walls(0, 0)  #generating random maze
 
     def create_cells(self):  #method for creating a list of the cells in the maze and then drawing them out
         self.cells = []
@@ -21,19 +28,6 @@ class Maze:  #create Maze class
             for i in range(0, self.num_rows):
                 row_list.append(Cell(self.win))
             self.cells.append(row_list)
-
-        self.break_entrance_and_exit()
-
-        j = 0
-        for col in self.cells:
-            i = 0
-            for cel in col:
-                x_var = self.x1 + (i * self.cell_size_x)
-                y_var = self.y1 + (j * self.cell_size_y)
-                cel.draw(x_var, y_var, x_var + self.cell_size_x, y_var + self.cell_size_y)
-                self.animate()
-                i += 1
-            j += 1
 
     def animate(self):  #method to put a delay on the drawn cells for human readability
         self.win.redraw()
@@ -45,3 +39,39 @@ class Maze:  #create Maze class
 
         exit_cell = self.cells[self.num_cols - 1][self.num_rows - 1]
         exit_cell.has_bottom_wall = False
+
+    def break_rand_walls(self, col, row):  #method to remove walls throughout the maze randomly unless a specific seed is called
+        self.cells[col][row].visited = True  #marks the current cell as visited
+        while True:  #loop adding every unvisited cell to a list then drawing those cells
+            neighbors = []
+            if col > 0 and self.cells[col - 1][row].visited == False:
+                neighbors.append([col - 1, row])
+            if col < self.num_cols - 1 and self.cells[col + 1][row].visited == False:
+                neighbors.append([col + 1, row])
+            if row > 0 and self.cells[col][row - 1].visited == False:
+                neighbors.append([col, row - 1])
+            if row < self.num_rows - 1 and self.cells[col][row + 1].visited == False:
+                neighbors.append([col, row + 1])
+            if neighbors == []:
+                x_var = self.x1 + (col * self.cell_size_x)
+                y_var = self.y1 + (row * self.cell_size_y)
+                self.cells[col][row].draw(x_var, y_var, x_var + self.cell_size_x, y_var + self.cell_size_y)
+                self.animate()
+                return
+            
+            next_direction = random.randint(0, len(neighbors) - 1)  #randomly selects the next cell selected from an unvisited neighbor, then determines what walls it won't have
+            next_cell = neighbors[next_direction]
+            if next_cell[0] == col - 1:
+                self.cells[col][row].has_left_wall = False
+                self.cells[col - 1][row].has_right_wall = False
+            if next_cell[0] == col + 1:
+                self.cells[col][row].has_right_wall = False
+                self.cells[col + 1][row].has_left_wall = False
+            if next_cell[1]  == row - 1:
+                self.cells[col][row].has_top_wall = False
+                self.cells[col][row - 1].has_bottom_wall = False
+            if next_cell[1]  == row + 1:
+                self.cells[col][row].has_bottom_wall = False
+                self.cells[col][row + 1].has_top_wall = False
+
+            self.break_rand_walls(next_cell[0], next_cell[1])  #recursive call to ensure every cell is defined and drawn
