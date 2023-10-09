@@ -1,8 +1,8 @@
-from graphics import Line, Point  #  import Line, Point classes
+from graphics import Window, Line, Point  #  import Line, Point classes
 
 class Cell:  #create Cell class
 
-    def __init__(self, win):  #constructor initiates wall existence, then initiates corner variables, takes an input window for cell location
+    def __init__(self, win = None):  #constructor initiates wall existence, then initiates corner variables, takes an input window for cell location
         self.has_left_wall = True
         self.has_right_wall = True
         self.has_top_wall = True

@@ -23,8 +23,8 @@ class Window:  #create window class
     def close(self):  #removes the window
         self.running = False
 
-    def draw_line(self, Line, fill_color = "Black"):  #draws a line in the window
-        Line.draw(self.canvas, fill_color)
+    def draw_line(self, line, fill_color = "Black"):  #draws a line in the window
+        line.draw(self.canvas, fill_color)
 
 class Point:  #create Point class
 
