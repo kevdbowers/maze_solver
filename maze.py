@@ -20,6 +20,7 @@ class Maze:  #create Maze class
         self.create_cells()  #draws maze through create_cells method
         self.break_entrance_and_exit()  #defining entrance and exit cells so that they're left open
         self.break_rand_walls(0, 0)  #generating random maze
+        self.reset_cells_visited()  #calls visited reset method
 
     def create_cells(self):  #method for creating a list of the cells in the maze and then drawing them out
         self.cells = []
@@ -53,6 +54,8 @@ class Maze:  #create Maze class
             if row < self.num_rows - 1 and self.cells[col][row + 1].visited == False:
                 neighbors.append([col, row + 1])
             if neighbors == []:
+                if self.win == None:
+                    return
                 x_var = self.x1 + (col * self.cell_size_x)
                 y_var = self.y1 + (row * self.cell_size_y)
                 self.cells[col][row].draw(x_var, y_var, x_var + self.cell_size_x, y_var + self.cell_size_y)
@@ -75,3 +78,49 @@ class Maze:  #create Maze class
                 self.cells[col][row + 1].has_top_wall = False
 
             self.break_rand_walls(next_cell[0], next_cell[1])  #recursive call to ensure every cell is defined and drawn
+
+    def reset_cells_visited(self):  #creates a method to reset the .visited variable of every cell to False
+        for j in range(0, self.num_cols):
+            for i in range(0, self.num_rows):
+                self.cells[j][i].visited = False
+
+    def solve(self, j = 0, i = 0):  #creates the solve method which initiates a solver at 0, 0 and returns the result
+        return self.solver(j, i)
+    
+    def solver(self, j, i):  #creates the solver method which marks the current cell as visited, then recursively searches cells in a maze until reaching the exit, if possible.
+        self.animate()
+        self.cells[j][i].visited = True
+        if self.cells[self.num_cols - 1][self.num_rows - 1].visited == True:
+            return True
+        
+        if self.cells[j][i].has_left_wall == False and j > 0 and self.cells[j - 1][i].visited == False:
+            self.cells[j][i].draw_move(self.cells[j - 1][i])
+            solved = self.solver(j - 1, i)
+            if solved == True:
+                return True
+            self.cells[j][i].draw_move(self.cells[j - 1][i], True)
+
+        if self.cells[j][i].has_right_wall == False and j < self.num_cols - 1 and self.cells[j + 1][i].visited == False:
+            self.cells[j][i].draw_move(self.cells[j + 1][i])
+            solved = self.solver(j + 1, i)
+            if solved == True:
+                return True
+            self.cells[j][i].draw_move(self.cells[j + 1][i], True)
+
+        if self.cells[j][i].has_top_wall == False and i > 0 and self.cells[j][i - 1].visited == False:
+            self.cells[j][i].draw_move(self.cells[j][i - 1])
+            solved = self.solver(j, i - 1)
+            if solved == True:
+                return True
+            self.cells[j][i].draw_move(self.cells[j][i - 1], True)
+        
+        if self.cells[j][i].has_bottom_wall == False and i < self.num_rows - 1 and self.cells[j][i + 1].visited == False:
+            self.cells[j][i].draw_move(self.cells[j][i + 1])
+            solved = self.solver(j, i + 1)
+            if solved == True:
+                return True
+            self.cells[j][i].draw_move(self.cells[j][i + 1], True)
+        
+        return False
+    
+

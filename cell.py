@@ -45,9 +45,9 @@ class Cell:  #create Cell class
         if self.win is None:
             return
         
-        line_color = "Red"
+        line_color = "Green"
         if undo == True:
-            line_color = "Gray"
+            line_color = "Red"
 
         self_center_x = (self.x1 + self.x2) / 2
         self_center_y = (self.y1 + self.y2) / 2
